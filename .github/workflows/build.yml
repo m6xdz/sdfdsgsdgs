@@ -10,6 +10,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Install ATL components via VS installer
+      run: |
+        # Устанавливаем ATL для поддержки atlstr.h
+        choco install visualstudio2022-workload-vctools --no-progress
+      shell: powershell
+
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v2
 
