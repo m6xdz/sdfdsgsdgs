@@ -12,8 +12,18 @@ jobs:
 
     - name: Install ATL components via VS installer
       run: |
-        # Устанавливаем ATL для поддержки atlstr.h
         choco install visualstudio2022-workload-vctools --no-progress
+      shell: powershell
+
+    - name: Download ImGui library
+      run: |
+        git clone https://github.com/ocornut/imgui.git temp_imgui
+        # Копируем заголовочные и исходные файлы ImGui прямо в корень проекта, чтобы компилятор их нашел
+        Copy-Item temp_imgui/*.h -Destination .
+        Copy-Item temp_imgui/*.cpp -Destination .
+        # Также подпапки для бэкендов DX9/Win32 если требуются
+        New-Item -ItemType Directory -Force -Path imgui
+        Copy-Item temp_imgui/* -Destination imgui -Recurse
       shell: powershell
 
     - name: Add MSBuild to PATH
